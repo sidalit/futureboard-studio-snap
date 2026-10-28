@@ -1,0 +1,187 @@
+name: futureboard-studio
+base: core26
+version: '2026.10.16-beta1.4.4'
+title: Futureboard Studio
+icon: snap/gui/futureboard-studio.png
+summary: A native digital audio workstation with instruments and effects
+description: |
+  Futureboard Studio Community Edition is a native digital audio workstation
+  for recording, arranging, mixing and editing audio and MIDI. It includes
+  built-in instruments and effects, a soundfont player, audio repair, stem
+  extraction, and native VST3 and CLAP plugin hosting.
+license: MIT
+grade: stable
+confinement: strict
+website: https://futureboard.studio
+source-code:
+  - https://github.com/futureboard/futureboard-studio
+  - https://github.com/sidalit/futureboard-studio-snap
+issues:
+  - https://github.com/futureboard/futureboard-studio/issues
+  - https://github.com/sidalit/futureboard-studio-snap/issues
+contact: https://github.com/sidalit/futureboard-studio-snap/issues
+
+platforms:
+  amd64:
+
+plugs:
+  shared-memory:
+    private: true
+
+apps:
+  futureboard-studio:
+    command: opt/futureboard-studio/FutureboardNative
+    extensions: [gnome]
+    plugs:
+      - home
+      - network
+      - network-bind
+      - browser-support
+      - shared-memory
+      - audio-playback
+      - audio-record
+      - alsa
+      - removable-media
+    environment:
+      PATH: $SNAP/bin:$SNAP/usr/bin:$PATH
+      LD_LIBRARY_PATH: $SNAP/opt/futureboard-studio:$LD_LIBRARY_PATH
+      ALSA_CONFIG_PATH: $SNAP/etc/alsa/alsa.conf
+      ALSA_PLUGIN_DIR: $SNAP/usr/lib/x86_64-linux-gnu/alsa-lib
+      XDG_STATE_HOME: $SNAP_USER_DATA/.local/state
+
+layout:
+  /usr/share/alsa:
+    bind: $SNAP/usr/share/alsa
+
+parts:
+  bun:
+    plugin: nil
+    build-snaps: [node/24/stable]
+    override-build: |
+      npm install --global --prefix "$CRAFT_PART_INSTALL" bun@1.4.3
+    prime:
+      - -*
+
+  cef:
+    plugin: dump
+    source: https://cef-builds.spotifycdn.com/cef_binary_150.0.11%2Bgb887805%2Bchromium-150.0.7871.115_linux64_minimal.tar.bz2
+    source-checksum: sha256/a830c79c9dfd4d54f0ebb9bbb71893533eca60ed177054b59caca8da80ec4162
+    organize:
+      '*': build-deps/cef/
+    override-build: |
+      craftctl default
+      cef="$CRAFT_PART_INSTALL"
+      cp -a "$cef/Release/." "$cef/Resources/." "$cef/"
+      cat > "$cef/archive.json" <<'EOF'
+      {
+        "type": "minimal",
+        "name": "cef_binary_150.0.11+gb887805+chromium-150.0.7871.115_linux64_minimal.tar.bz2",
+        "sha1": "fab06dea90e96a4804b82941bdca3aecffaa8d3c"
+      }
+      EOF
+    prime:
+      - -*
+
+  crashpad:
+    plugin: dump
+    source: https://github.com/bahamoth/crashpad-rs/releases/download/v0.2.7/crashpad-0.2.7-x86_64-unknown-linux-gnu.tar.gz
+    source-checksum: sha256/17d71ee7c0662a7c105347e1f4f01f131a14b8231924a820db0327a07e9672a6
+    organize:
+      '*.a': build-deps/crashpad/prebuilt/0.2.7/x86_64-unknown-linux-gnu/
+      .crashpad-ok: build-deps/crashpad/prebuilt/0.2.7/x86_64-unknown-linux-gnu/.crashpad-ok
+      bindings.rs: build-deps/crashpad/prebuilt/0.2.7/x86_64-unknown-linux-gnu/bindings.rs
+      crashpad_handler: build-deps/crashpad/prebuilt/0.2.7/x86_64-unknown-linux-gnu/crashpad_handler
+    override-build: |
+      craftctl default
+      touch "$CRAFT_PART_INSTALL/.crashpad-ok"
+    stage:
+      - build-deps/crashpad
+    prime:
+      - -*
+
+  onnxruntime:
+    plugin: dump
+    source: https://github.com/microsoft/onnxruntime/releases/download/v1.23.2/onnxruntime-linux-x64-1.23.2.tgz
+    source-checksum: sha256/1fa4dcaef22f6f7d5cd81b28c2800414350c10116f5fdd46a2160082551c5f9b
+    organize:
+      lib: opt/futureboard-studio
+      LICENSE: usr/share/doc/futureboard-studio/onnxruntime/LICENSE
+      ThirdPartyNotices.txt: usr/share/doc/futureboard-studio/onnxruntime/ThirdPartyNotices.txt
+    stage:
+      - opt/futureboard-studio/*.so*
+      - usr/share/doc/futureboard-studio/onnxruntime
+
+  futureboard-studio:
+    plugin: rust
+    source: https://github.com/futureboard/futureboard-studio.git
+    source-tag: $SNAPCRAFT_PROJECT_VERSION
+    source-depth: 1
+    source-submodules:
+      - external/cpal
+      - external/vst3sdk
+      - external/clap
+      - external/clap-helpers
+      - external/yoga
+      - external/ARA_SDK
+      - packages/shared/tabler-icons
+      - packages/shared/lucide
+    rust-channel: '1.99.1'
+    after: [bun, cef, crashpad]
+    build-snaps: [node/24/stable]
+    build-environment:
+      - PATH: $CRAFT_STAGE/bin:$PATH
+      - CEF_PATH: $CRAFT_STAGE/build-deps/cef
+      - CRASHPAD_CACHE_DIR: $CRAFT_STAGE/build-deps/crashpad
+      - CARGO_BUILD_JOBS: $CRAFT_PARALLEL_BUILD_COUNT
+      - FUTUREBOARD_ORT_SKIP_DOWNLOAD: '1'
+      - FUTUREBOARD_AUTH_API_URL: https://futureboard.studio
+    build-packages:
+      - build-essential
+      - clang
+      - libclang-dev
+      - cmake
+      - pkg-config
+      - libasound2-dev
+      - libgtk-4-dev
+      - libglib2.0-dev
+      - libx11-dev
+      - libxkbcommon-dev
+      - libxkbcommon-x11-dev
+      - libxcb1-dev
+      - libxcb-xfixes0-dev
+      - libxcb-shape0-dev
+      - libxcb-render-util0-dev
+      - libxcb-composite0-dev
+      - libxi-dev
+      - libgl-dev
+      - libfontconfig-dev
+      - libssl-dev
+      - patch
+    stage-packages:
+      - libasound2-data
+      - libasound2-plugins
+      - libcups2t64
+      - libxkbcommon-x11-0
+      - libnss3
+      - libnspr4
+    override-pull: |
+      craftctl default
+      patch -p1 < "$CRAFT_PROJECT_DIR/snap/patches/snap-runtime.patch"
+    override-build: |
+      mkdir -p build/cef/150.0.11
+      ln -sfn "$CEF_PATH" build/cef/150.0.11/cef_linux_x86_64
+      cargo run --locked -p xtask -- package --profile release --edition community --plugin all
+
+      app="$CRAFT_PART_INSTALL/opt/futureboard-studio"
+      mkdir -p "$app"
+      cp -a out/release/community/linux-x64/. "$app/"
+      rm -f "$app/chrome-sandbox"
+      install -Dm644 "$CRAFT_PROJECT_DIR/snap/local/asound.conf" \
+        "$CRAFT_PART_INSTALL/etc/alsa/alsa.conf"
+      install -Dm644 "$CRAFT_PROJECT_DIR/snap/gui/futureboard-studio.png" \
+        "$CRAFT_PART_INSTALL/usr/share/icons/hicolor/256x256/apps/futureboard-studio_futureboard-studio.png"
+      install -Dm644 packaging/linux/futureboard-studio-mime.xml \
+        "$CRAFT_PART_INSTALL/usr/share/mime/packages/futureboard-studio.xml"
+      install -Dm644 LICENSE "$CRAFT_PART_INSTALL/usr/share/doc/futureboard-studio/LICENSE"
+      install -Dm644 "$CEF_PATH/LICENSE.txt" \
+        "$CRAFT_PART_INSTALL/usr/share/doc/futureboard-studio/cef/LICENSE.txt"

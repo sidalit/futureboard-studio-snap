@@ -1,0 +1,21 @@
+--- a/xtask/src/cargo_build.rs
++++ b/xtask/src/cargo_build.rs
+@@ -50 +49,0 @@
+-const APAK_PACKAGE: &str = "apakinstaller";
+@@ -59 +58 @@
+-pub const APAK_BINARIES: &[&str] = &["apakinstaller", "apak", "makeapak"];
++pub const APAK_BINARIES: &[&str] = &[];
+@@ -113 +111,0 @@
+-        .args(["--package", APAK_PACKAGE])
+--- a/apps/native/studio/src/app.rs
++++ b/apps/native/studio/src/app.rs
+@@ -675,0 +676,3 @@
++    if std::env::var_os("SNAP").is_some() {
++        return;
++    }
+--- a/crates/SphereUIComponents/src/platform_chrome.rs
++++ b/crates/SphereUIComponents/src/platform_chrome.rs
+@@ -258,2 +258,3 @@
+     WindowOptions {
++        app_id: Some("futureboard-studio_futureboard-studio".into()),
+         titlebar: Some(PlatformChromePolicy::studio_titlebar_options()),

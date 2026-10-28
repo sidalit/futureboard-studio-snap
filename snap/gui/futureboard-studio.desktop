@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Futureboard Studio
+Comment=Record, arrange and mix music
+Exec=futureboard-studio %U
+Icon=${SNAP}/meta/gui/futureboard-studio.png
+Type=Application
+Categories=AudioVideo;Audio;Music;
+MimeType=application/x-fbproj;x-scheme-handler/fbrd;
+StartupWMClass=futureboard-studio_futureboard-studio
+Terminal=false
