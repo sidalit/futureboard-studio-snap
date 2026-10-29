@@ -1,17 +1,14 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "enabled": false,
   "assignees": [
     "sidalit"
   ],
   "extends": [
-    "github>sidalit/snap-automation#v1.1.0"
+    "github>sidalit/snap-automation#v1.2.0"
   ],
   "packageRules": [
     {
-      "matchDepNames": [
-        "upstream"
-      ],
+      "matchDepNames": ["upstream"],
       "overridePackageName": "futureboard/futureboard-studio",
       "ignoreUnstable": false
     }

@@ -52,8 +52,6 @@ Place additional Linux plugins in a visible folder such as `~/Music/Plugins` and
 
 ## Build
 
-Packaging draft: automated builds and dependency updates are deferred.
-
 ```bash
 git clone https://github.com/sidalit/futureboard-studio-snap.git
 cd futureboard-studio-snap
