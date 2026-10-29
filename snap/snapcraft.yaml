@@ -116,15 +116,6 @@ parts:
     source: https://github.com/futureboard/futureboard-studio.git
     source-tag: $SNAPCRAFT_PROJECT_VERSION
     source-depth: 1
-    source-submodules:
-      - external/cpal
-      - external/vst3sdk
-      - external/clap
-      - external/clap-helpers
-      - external/yoga
-      - external/ARA_SDK
-      - packages/shared/tabler-icons
-      - packages/shared/lucide
     rust-channel: '1.99.1'
     after: [bun, cef, crashpad]
     build-snaps: [node/24/stable]
