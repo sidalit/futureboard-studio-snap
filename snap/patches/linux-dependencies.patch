@@ -1,0 +1,72 @@
+--- a/crates/SphereDirectAudioEngine/Cargo.toml
++++ b/crates/SphereDirectAudioEngine/Cargo.toml
+@@ -97,9 +97,6 @@
+ # ASIO driver enumeration reads HKLM\SOFTWARE\ASIO instead of instantiating
+ # drivers (see src/asio_registry.rs).
+ windows-registry.workspace = true
+-# DAUx SDK: the DAUx engine behind the "DAUx Direct" backend (DAUx-KS kernel
+-# streaming). Local checkout of the daux repository.
+-daux-sdk = { path = "H:/daux/crates/daux-sdk" }
+
+ # ── Linux-only: realtime scheduling for the ALSA callback thread ─────────────
+ #
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -2445,49 +2445,6 @@
+ version = "0.3.2"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "be1e0bca6c3637f992fc1cc7cbc52a78c1ef6db076dbf1059c4323d6a2048376"
+-
+-[[package]]
+-name = "daux"
+-version = "0.4.0"
+-dependencies = [
+- "daux-sys",
+- "libc",
+-]
+-
+-[[package]]
+-name = "daux-engine"
+-version = "0.4.0"
+-dependencies = [
+- "daux-ks",
+- "daux-usb",
+- "windows 0.62.2",
+-]
+-
+-[[package]]
+-name = "daux-ks"
+-version = "0.4.0"
+-dependencies = [
+- "windows 0.62.2",
+-]
+-
+-[[package]]
+-name = "daux-sdk"
+-version = "0.4.0"
+-dependencies = [
+- "daux",
+- "daux-engine",
+-]
+-
+-[[package]]
+-name = "daux-sys"
+-version = "0.4.0"
+-
+-[[package]]
+-name = "daux-usb"
+-version = "0.4.0"
+-dependencies = [
+- "windows 0.62.2",
+-]
+
+ [[package]]
+ name = "deflate64"
+@@ -8668,7 +8625,6 @@
+  "cc",
+  "cpal",
+  "crossbeam-channel",
+- "daux-sdk",
+  "ebur128",
+  "fbmx-runtime",
+  "libc",

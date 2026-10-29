@@ -166,6 +166,7 @@ parts:
       - libnspr4
     override-pull: |
       craftctl default
+      patch -p1 < "$CRAFT_PROJECT_DIR/snap/patches/linux-dependencies.patch"
       patch -p1 < "$CRAFT_PROJECT_DIR/snap/patches/snap-runtime.patch"
     override-build: |
       mkdir -p build/cef/150.0.11
