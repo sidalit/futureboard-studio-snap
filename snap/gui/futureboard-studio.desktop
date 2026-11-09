@@ -6,5 +6,5 @@ Icon=${SNAP}/meta/gui/futureboard-studio.png
 Type=Application
 Categories=AudioVideo;Audio;Music;
 MimeType=application/x-fbproj;x-scheme-handler/fbrd;
-StartupWMClass=futureboard-studio_futureboard-studio
+StartupWMClass=FutureboardNative
 Terminal=false

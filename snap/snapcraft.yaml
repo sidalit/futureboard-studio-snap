@@ -171,7 +171,7 @@ parts:
       install -Dm644 "$CRAFT_PROJECT_DIR/snap/local/asound.conf" \
         "$CRAFT_PART_INSTALL/etc/alsa/alsa.conf"
       install -Dm644 "$CRAFT_PROJECT_DIR/snap/gui/futureboard-studio.png" \
-        "$CRAFT_PART_INSTALL/usr/share/icons/hicolor/256x256/apps/futureboard-studio_futureboard-studio.png"
+        "$CRAFT_PART_INSTALL/usr/share/icons/hicolor/256x256/apps/futureboard-studio.png"
       install -Dm644 packaging/linux/futureboard-studio-mime.xml \
         "$CRAFT_PART_INSTALL/usr/share/mime/packages/futureboard-studio.xml"
       install -Dm644 LICENSE "$CRAFT_PART_INSTALL/usr/share/doc/futureboard-studio/LICENSE"

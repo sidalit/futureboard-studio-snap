@@ -13,9 +13,3 @@
 +    if std::env::var_os("SNAP").is_some() {
 +        return;
 +    }
---- a/crates/SphereUIComponents/src/platform_chrome.rs
-+++ b/crates/SphereUIComponents/src/platform_chrome.rs
-@@ -258,2 +258,3 @@
-     WindowOptions {
-+        app_id: Some("futureboard-studio_futureboard-studio".into()),
-         titlebar: Some(PlatformChromePolicy::studio_titlebar_options()),
