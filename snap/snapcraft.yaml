@@ -56,7 +56,8 @@ layout:
 parts:
   bun:
     plugin: nil
-    build-snaps: [node/24/stable]
+    build-snaps:
+      - node/24/stable
     override-build: |
       npm install --global --prefix "$CRAFT_PART_INSTALL" bun@1.4.3
     prime:
@@ -118,7 +119,8 @@ parts:
     source-depth: 1
     rust-channel: '1.99.1'
     after: [bun, cef, crashpad]
-    build-snaps: [node/24/stable]
+    build-snaps:
+      - node/24/stable
     build-environment:
       - PATH: $CRAFT_STAGE/bin:$PATH
       - CEF_PATH: $CRAFT_STAGE/build-deps/cef
