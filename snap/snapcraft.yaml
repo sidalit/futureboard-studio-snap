@@ -157,7 +157,14 @@ parts:
       - libnspr4
     override-pull: |
       craftctl default
-      patch -p1 < "$CRAFT_PROJECT_DIR/snap/patches/linux-dependencies.patch"
+      # Upstream removed the DAUx dependency and the APAK tools after this
+      # release, so patch them only while the source still has them.
+      if grep -q '^daux-sdk = { path' crates/SphereDirectAudioEngine/Cargo.toml; then
+        patch -p1 < "$CRAFT_PROJECT_DIR/snap/patches/linux-dependencies.patch"
+      fi
+      if grep -q 'APAK_PACKAGE' xtask/src/cargo_build.rs; then
+        patch -p1 < "$CRAFT_PROJECT_DIR/snap/patches/skip-apak.patch"
+      fi
       patch -p1 < "$CRAFT_PROJECT_DIR/snap/patches/snap-runtime.patch"
     override-build: |
       mkdir -p build/cef/150.0.11

@@ -1,0 +1,27 @@
+--- a/xtask/src/cargo_build.rs
++++ b/xtask/src/cargo_build.rs
+@@ -47,7 +47,6 @@
+ /// Package that owns the runtime sidecar executables.
+ const SIDECAR_PACKAGE: &str = "sphere-plugin-host";
+ const CEF_HELPER_PACKAGE: &str = "futureboard_cef_helper";
+-const APAK_PACKAGE: &str = "apakinstaller";
+ pub const CEF_HELPER_BINARY: &str = "futureboard_cef_helper";
+ 
+ /// Sidecar binaries `FutureboardNative` spawns from its own directory. These are
+@@ -56,7 +55,7 @@
+ pub const SIDECAR_BINARIES: &[&str] = &["FutureboardPluginHostX64", "FutureboardPluginScanner"];
+ 
+ /// APAK tools shipped under the staged application's `bin/` directory.
+-pub const APAK_BINARIES: &[&str] = &["apakinstaller", "apak", "makeapak"];
++pub const APAK_BINARIES: &[&str] = &[];
+ 
+ /// Feature flags that unlock the sidecar `[[bin]]` targets (their
+ /// `required-features`).
+@@ -110,7 +109,6 @@
+         .arg("--message-format=json-render-diagnostics")
+         .args(["--package", APP_PACKAGE])
+         .args(["--package", SIDECAR_PACKAGE])
+-        .args(["--package", APAK_PACKAGE])
+         .args(["--bin", APP_BINARY])
+         .args(["--profile", profile])
+         .arg("--target-dir")
