@@ -169,8 +169,15 @@ parts:
       fi
       patch -p1 < "$CRAFT_PROJECT_DIR/snap/patches/snap-runtime.patch"
     override-build: |
-      mkdir -p build/cef/150.0.11
-      ln -sfn "$CEF_PATH" build/cef/150.0.11/cef_linux_x86_64
+      # After this release, upstream packages only a CEF tree that its own
+      # installer unpacked and recorded, so run that installer when the source
+      # has the check. Older sources use the tree from the cef part.
+      if grep -q 'INSTALL_MANIFEST' crates/SphereWebView/src/lib.rs; then
+        cargo run --locked -p SphereWebView --example install_cef --features installer
+      else
+        mkdir -p build/cef/150.0.11
+        ln -sfn "$CEF_PATH" build/cef/150.0.11/cef_linux_x86_64
+      fi
       cargo run --locked -p xtask -- package --profile release --edition community --plugin all
 
       app="$CRAFT_PART_INSTALL/opt/futureboard-studio"
