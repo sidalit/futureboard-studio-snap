@@ -117,7 +117,7 @@ parts:
     source: https://github.com/futureboard/futureboard-studio.git
     source-tag: $SNAPCRAFT_PROJECT_VERSION
     source-depth: 1
-    rust-channel: '1.99.1'
+    rust-channel: stable
     after: [bun, cef, crashpad]
     build-snaps:
       - node/24/stable
