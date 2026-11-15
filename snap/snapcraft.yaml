@@ -1,6 +1,6 @@
 name: futureboard-studio
 base: core26
-version: '2026.10.16-beta1.4.4'
+version: '2026.11.1-beta2.0.0'
 title: Futureboard Studio
 icon: snap/gui/futureboard-studio.png
 summary: A native digital audio workstation with instruments and effects
